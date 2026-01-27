@@ -167,7 +167,6 @@
             text-shadow: 0 0 10px var(--shadow-white);
         }
 
-        /* Вкладки */
         .tabs-container {
             display: flex;
             justify-content: center;
@@ -536,7 +535,7 @@
     </style>
 </head>
 <body>
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop autoplay>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
@@ -574,7 +573,6 @@
             <p>Копия Really World — Твой новый мир приключений!</p>
         </div>
 
-        <!-- Вкладки -->
         <div class="tabs-container">
             <button class="tab-btn active" onclick="switchTab('privileges')">
                 ⚡ Привилегии
@@ -584,7 +582,6 @@
             </button>
         </div>
 
-        <!-- Привилегии -->
         <div id="privileges" class="tab-content active">
             <div class="privileges-grid">
                 <div class="privilege-card">
@@ -655,7 +652,6 @@
             </div>
         </div>
 
-        <!-- Услуги -->
         <div id="services" class="tab-content">
             <div class="services-grid">
                 <div class="service-card">
@@ -706,8 +702,15 @@
     </footer>
 
     <script>
-        let musicPlaying = false;
+        let musicPlaying = true;
         const music = document.getElementById('bgMusic');
+
+        window.addEventListener('load', function() {
+            music.play().catch(function() {
+                musicPlaying = false;
+                document.getElementById('musicIcon').textContent = '🔇 Музыка';
+            });
+        });
 
         function toggleMusic() {
             const icon = document.getElementById('musicIcon');
@@ -723,25 +726,20 @@
         }
 
         function switchTab(tabName) {
-            // Скрываем все вкладки
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.remove('active'));
 
-            // Убираем активный класс у всех кнопок
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
 
-            // Показываем выбранную вкладку
             document.getElementById(tabName).classList.add('active');
 
-            // Активируем соответствующую кнопку
             if (tabName === 'privileges') {
                 buttons[0].classList.add('active');
             } else {
                 buttons[1].classList.add('active');
             }
 
-            // Прокручиваем к вкладкам
             window.scrollTo({
                 top: document.querySelector('.tabs-container').offsetTop - 100,
                 behavior: 'smooth'
