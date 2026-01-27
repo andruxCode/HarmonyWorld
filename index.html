@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalWorld - Копия Really World</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-yellow: #ffff00;
+            --neon-white: #ffffff;
+            --bright-yellow: #ffe135;
+            --dark-bg: #0a0a0a;
+            --gray-bg: #1a1a1a;
+            --shadow-yellow: rgba(255, 255, 0, 0.5);
+            --shadow-white: rgba(255, 255, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+            color: var(--neon-white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 1;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            animation: fall linear infinite;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        header {
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--neon-yellow);
+            box-shadow: 0 0 30px var(--shadow-yellow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Press Start+2P', monospace;
+            font-size: 1.8rem;
+            color: var(--neon-yellow);
+            text-shadow: 
+                0 0 10px var(--neon-yellow),
+                0 0 20px var(--neon-yellow),
+                0 0 30px var(--neon-yellow);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 10px var(--neon-yellow),
+                    0 0 20px var(--neon-yellow),
+                    0 0 30px var(--neon-yellow);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 20px var(--neon-yellow),
+                    0 0 30px var(--neon-yellow),
+                    0 0 40px var(--neon-yellow),
+                    0 0 50px var(--neon-yellow);
+            }
+        }
+
+        .music-control {
+            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            color: var(--dark-bg);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--shadow-yellow);
+            font-size: 1rem;
+        }
+
+        .music-control:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--shadow-yellow);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--neon-yellow);
+            text-shadow: 
+                0 0 10px var(--neon-yellow),
+                0 0 20px var(--neon-yellow),
+                0 0 30px var(--neon-yellow),
+                0 0 40px var(--neon-yellow);
+            animation: slideDown 1s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: var(--neon-white);
+            text-shadow: 0 0 10px var(--shadow-white);
+        }
+
+        /* Вкладки */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tab-btn {
+            background: rgba(26, 26, 26, 0.8);
+            border: 3px solid var(--neon-yellow);
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            color: var(--neon-yellow);
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--shadow-yellow);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 35px var(--shadow-yellow);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
+            color: var(--dark-bg);
+            box-shadow: 
+                0 0 35px var(--shadow-yellow),
+                0 0 20px var(--shadow-white);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .privileges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .privilege-card {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 3px solid var(--neon-yellow);
+            border-radius: 15px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 20px var(--shadow-yellow),
+                inset 0 0 20px rgba(255, 255, 0, 0.1);
+        }
+
+        .privilege-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 0, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .privilege-card:hover::before {
+            left: 100%;
+        }
+
+        .privilege-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            border-color: var(--neon-white);
+            box-shadow: 
+                0 0 40px var(--shadow-yellow),
+                0 0 20px var(--shadow-white),
+                inset 0 0 30px rgba(255, 255, 0, 0.2);
+        }
+
+        .privilege-card h3 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--neon-yellow);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--neon-yellow);
+        }
+
+        .privilege-card .price {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--neon-white);
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px var(--shadow-white);
+        }
+
+        .privilege-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .privilege-card li {
+            padding: 0.8rem 0;
+            border-bottom: 2px solid rgba(255, 255, 0, 0.2);
+            color: var(--neon-white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .privilege-card li:hover {
+            padding-left: 10px;
+            color: var(--neon-yellow);
+        }
+
+        .privilege-card li:before {
+            content: '⚡ ';
+            color: var(--neon-yellow);
+            font-size: 1.2em;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
+            border: 3px solid var(--neon-yellow);
+            border-radius: 10px;
+            color: var(--dark-bg);
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px var(--shadow-yellow);
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 40px var(--shadow-yellow),
+                0 0 20px var(--shadow-white);
+            background: linear-gradient(135deg, var(--bright-yellow), var(--neon-yellow));
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 3px solid var(--neon-yellow);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--shadow-yellow);
+        }
+
+        .service-card:hover {
+            background: rgba(26, 26, 26, 0.95);
+            transform: scale(1.08);
+            box-shadow: 0 0 35px var(--shadow-yellow);
+        }
+
+        .service-card h4 {
+            font-size: 1.8rem;
+            color: var(--neon-yellow);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .service-card .service-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--neon-white);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px var(--shadow-white);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInModal 0.3s ease;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+            border: 4px solid var(--neon-yellow);
+            border-radius: 20px;
+            padding: 3.5rem;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 
+                0 0 50px var(--shadow-yellow),
+                0 0 100px var(--shadow-yellow);
+            animation: scaleIn 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 3rem;
+            color: var(--neon-yellow);
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s ease;
+            line-height: 1;
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .modal-close:hover {
+            color: var(--neon-white);
+            transform: rotate(90deg);
+            text-shadow: 0 0 20px var(--shadow-white);
+        }
+
+        .modal-content h3 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--neon-yellow);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px var(--neon-yellow);
+        }
+
+        .modal-content .item-name {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--neon-white);
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--shadow-white);
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .payment-btn {
+            padding: 1.8rem;
+            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
+            border: 3px solid var(--neon-yellow);
+            border-radius: 12px;
+            color: var(--dark-bg);
+            font-size: 1.3rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            box-shadow: 0 0 25px var(--shadow-yellow);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .payment-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 0 40px var(--shadow-yellow),
+                0 0 20px var(--shadow-white);
+            background: linear-gradient(135deg, var(--bright-yellow), var(--neon-yellow));
+        }
+
+        .payment-btn.discord::before {
+            content: '💬';
+            font-size: 2rem;
+        }
+
+        .payment-btn.telegram::before {
+            content: '✈️';
+            font-size: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            color: var(--neon-white);
+            border-top: 3px solid var(--neon-yellow);
+            box-shadow: 0 -5px 30px var(--shadow-yellow);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .privilege-card h3 {
+                font-size: 1.8rem;
+            }
+
+            .privilege-card .price {
+                font-size: 2rem;
+            }
+
+            .tab-btn {
+                font-size: 1.1rem;
+                padding: 1rem 2rem;
+            }
+
+            .tabs-container {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function createSnowflakes() {
+            const snowflakeCount = 60;
+            const body = document.body;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = Math.random() * 3 + 7 + 's';
+                snowflake.style.fontSize = Math.random() * 1.5 + 0.8 + 'em';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                body.appendChild(snowflake);
+            }
+        }
+        createSnowflakes();
+    </script>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">LocalWorld</div>
+            <button class="music-control" onclick="toggleMusic()">
+                <span id="musicIcon">🔊 Музыка</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h1>LocalWorld</h1>
+            <p>Копия Really World — Твой новый мир приключений!</p>
+        </div>
+
+        <!-- Вкладки -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('privileges')">
+                ⚡ Привилегии
+            </button>
+            <button class="tab-btn" onclick="switchTab('services')">
+                💎 Услуги
+            </button>
+        </div>
+
+        <!-- Привилегии -->
+        <div id="privileges" class="tab-content active">
+            <div class="privileges-grid">
+                <div class="privilege-card">
+                    <h3>Helper</h3>
+                    <div class="price">149₽</div>
+                    <ul>
+                        <li>Мут игроков</li>
+                        <li>Все киты кроме Пегаса</li>
+                        <li>Особый префикс</li>
+                        <li>Приоритет в очереди</li>
+                    </ul>
+                    <button class="buy-btn" onclick="openPaymentModal('Helper', '149₽')">Купить</button>
+                </div>
+
+                <div class="privilege-card">
+                    <h3>Moder</h3>
+                    <div class="price">349₽</div>
+                    <ul>
+                        <li>Все права Helper</li>
+                        <li>Темп бан игроков</li>
+                        <li>Спек режим</li>
+                        <li>ГМ 3 (режим наблюдения)</li>
+                        <li>Мут игроков</li>
+                    </ul>
+                    <button class="buy-btn" onclick="openPaymentModal('Moder', '349₽')">Купить</button>
+                </div>
+
+                <div class="privilege-card">
+                    <h3>DAdmin</h3>
+                    <div class="price">599₽</div>
+                    <ul>
+                        <li>Все права Moder</li>
+                        <li>Спек режим</li>
+                        <li>Все киты</li>
+                        <li>Бан игроков</li>
+                        <li>Бан по IP</li>
+                        <li>Мут игроков</li>
+                    </ul>
+                    <button class="buy-btn" onclick="openPaymentModal('DAdmin', '599₽')">Купить</button>
+                </div>
+
+                <div class="privilege-card">
+                    <h3>Admin</h3>
+                    <div class="price">699₽</div>
+                    <ul>
+                        <li>Все права DAdmin</li>
+                        <li>Бан игроков</li>
+                        <li>ГМ 3 (режим наблюдения)</li>
+                        <li>Спек режим</li>
+                        <li>Мут игроков</li>
+                        <li>Расширенные команды</li>
+                    </ul>
+                    <button class="buy-btn" onclick="openPaymentModal('Admin', '699₽')">Купить</button>
+                </div>
+
+                <div class="privilege-card">
+                    <h3>Owner</h3>
+                    <div class="price">3999₽</div>
+                    <ul>
+                        <li>ВСЕ права на сервере</li>
+                        <li>Абсолютная власть</li>
+                        <li>Донат выдаётся правами</li>
+                        <li>Особый статус владельца</li>
+                        <li>Управление сервером</li>
+                    </ul>
+                    <button class="buy-btn" onclick="openPaymentModal('Owner', '3999₽')">Купить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Услуги -->
+        <div id="services" class="tab-content">
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>Разбан</h4>
+                    <div class="service-price">149₽</div>
+                    <button class="buy-btn" onclick="openPaymentModal('Разбан', '149₽')">Купить</button>
+                </div>
+
+                <div class="service-card">
+                    <h4>Размут</h4>
+                    <div class="service-price">49₽</div>
+                    <button class="buy-btn" onclick="openPaymentModal('Размут', '49₽')">Купить</button>
+                </div>
+
+                <div class="service-card">
+                    <h4>1 Рилик</h4>
+                    <div class="service-price">1₽</div>
+                    <button class="buy-btn" onclick="openPaymentModal('1 Рилик', '1₽')">Купить</button>
+                </div>
+
+                <div class="service-card">
+                    <h4>10 Риликов</h4>
+                    <div class="service-price">10₽</div>
+                    <button class="buy-btn" onclick="openPaymentModal('10 Риликов', '10₽')">Купить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePaymentModal()">×</button>
+            <h3>Выберите способ связи</h3>
+            <div class="item-name" id="modalItemName"></div>
+            <div class="payment-options">
+                <a href="https://discord.com/users/mrfle1zi" target="_blank" class="payment-btn discord">
+                    Написать в Discord
+                </a>
+                <a href="https://t.me/Fle1ziksorig" target="_blank" class="payment-btn telegram">
+                    Написать в Telegram
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 LocalWorld - Копия Really World. Все права защищены.</p>
+    </footer>
+
+    <script>
+        let musicPlaying = false;
+        const music = document.getElementById('bgMusic');
+
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            if (musicPlaying) {
+                music.pause();
+                icon.textContent = '🔇 Музыка';
+                musicPlaying = false;
+            } else {
+                music.play();
+                icon.textContent = '🔊 Музыка';
+                musicPlaying = true;
+            }
+        }
+
+        function switchTab(tabName) {
+            // Скрываем все вкладки
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Убираем активный класс у всех кнопок
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Показываем выбранную вкладку
+            document.getElementById(tabName).classList.add('active');
+
+            // Активируем соответствующую кнопку
+            if (tabName === 'privileges') {
+                buttons[0].classList.add('active');
+            } else {
+                buttons[1].classList.add('active');
+            }
+
+            // Прокручиваем к вкладкам
+            window.scrollTo({
+                top: document.querySelector('.tabs-container').offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
+
+        function openPaymentModal(itemName, price) {
+            const modal = document.getElementById('paymentModal');
+            const modalItemName = document.getElementById('modalItemName');
+            modalItemName.textContent = `${itemName} — ${price}`;
+            modal.classList.add('active');
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.remove('active');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target === modal) {
+                closePaymentModal();
+            }
+        }
+    </script>
+</body>
+</html>
