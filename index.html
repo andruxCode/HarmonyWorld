@@ -1,769 +1,336 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LocalWorld - Копия Really World</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --neon-yellow: #ffff00;
-            --neon-white: #ffffff;
-            --bright-yellow: #ffe135;
-            --dark-bg: #0a0a0a;
-            --gray-bg: #1a1a1a;
-            --shadow-yellow: rgba(255, 255, 0, 0.5);
-            --shadow-white: rgba(255, 255, 255, 0.3);
-        }
-
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
-            color: var(--neon-white);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            z-index: 1;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.2em;
-            animation: fall linear infinite;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-            }
-        }
-
-        header {
-            background: rgba(10, 10, 10, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 3px solid var(--neon-yellow);
-            box-shadow: 0 0 30px var(--shadow-yellow);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Press Start+2P', monospace;
-            font-size: 1.8rem;
-            color: var(--neon-yellow);
-            text-shadow: 
-                0 0 10px var(--neon-yellow),
-                0 0 20px var(--neon-yellow),
-                0 0 30px var(--neon-yellow);
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { 
-                text-shadow: 
-                    0 0 10px var(--neon-yellow),
-                    0 0 20px var(--neon-yellow),
-                    0 0 30px var(--neon-yellow);
-            }
-            50% { 
-                text-shadow: 
-                    0 0 20px var(--neon-yellow),
-                    0 0 30px var(--neon-yellow),
-                    0 0 40px var(--neon-yellow),
-                    0 0 50px var(--neon-yellow);
-            }
-        }
-
-        .music-control {
-            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            color: var(--dark-bg);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px var(--shadow-yellow);
-            font-size: 1rem;
-        }
-
-        .music-control:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px var(--shadow-yellow);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            animation: fadeInUp 1s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            color: var(--neon-yellow);
-            text-shadow: 
-                0 0 10px var(--neon-yellow),
-                0 0 20px var(--neon-yellow),
-                0 0 30px var(--neon-yellow),
-                0 0 40px var(--neon-yellow);
-            animation: slideDown 1s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 3rem;
-            color: var(--neon-white);
-            text-shadow: 0 0 10px var(--shadow-white);
-        }
-
-        .tabs-container {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .tab-btn {
-            background: rgba(26, 26, 26, 0.8);
-            border: 3px solid var(--neon-yellow);
-            padding: 1.2rem 3rem;
-            border-radius: 12px;
-            color: var(--neon-yellow);
-            font-size: 1.5rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px var(--shadow-yellow);
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-        }
-
-        .tab-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 35px var(--shadow-yellow);
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
-            color: var(--dark-bg);
-            box-shadow: 
-                0 0 35px var(--shadow-yellow),
-                0 0 20px var(--shadow-white);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .privileges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .privilege-card {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            border: 3px solid var(--neon-yellow);
-            border-radius: 15px;
-            padding: 2.5rem;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                0 0 20px var(--shadow-yellow),
-                inset 0 0 20px rgba(255, 255, 0, 0.1);
-        }
-
-        .privilege-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 0, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .privilege-card:hover::before {
-            left: 100%;
-        }
-
-        .privilege-card:hover {
-            transform: translateY(-15px) scale(1.03);
-            border-color: var(--neon-white);
-            box-shadow: 
-                0 0 40px var(--shadow-yellow),
-                0 0 20px var(--shadow-white),
-                inset 0 0 30px rgba(255, 255, 0, 0.2);
-        }
-
-        .privilege-card h3 {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: var(--neon-yellow);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--neon-yellow);
-        }
-
-        .privilege-card .price {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: var(--neon-white);
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px var(--shadow-white);
-        }
-
-        .privilege-card ul {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .privilege-card li {
-            padding: 0.8rem 0;
-            border-bottom: 2px solid rgba(255, 255, 0, 0.2);
-            color: var(--neon-white);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .privilege-card li:hover {
-            padding-left: 10px;
-            color: var(--neon-yellow);
-        }
-
-        .privilege-card li:before {
-            content: '⚡ ';
-            color: var(--neon-yellow);
-            font-size: 1.2em;
-        }
-
-        .buy-btn {
-            width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
-            border: 3px solid var(--neon-yellow);
-            border-radius: 10px;
-            color: var(--dark-bg);
-            font-size: 1.2rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 25px var(--shadow-yellow);
-            text-transform: uppercase;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .buy-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 
-                0 0 40px var(--shadow-yellow),
-                0 0 20px var(--shadow-white);
-            background: linear-gradient(135deg, var(--bright-yellow), var(--neon-yellow));
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: rgba(26, 26, 26, 0.8);
-            border: 3px solid var(--neon-yellow);
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px var(--shadow-yellow);
-        }
-
-        .service-card:hover {
-            background: rgba(26, 26, 26, 0.95);
-            transform: scale(1.08);
-            box-shadow: 0 0 35px var(--shadow-yellow);
-        }
-
-        .service-card h4 {
-            font-size: 1.8rem;
-            color: var(--neon-yellow);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px var(--neon-yellow);
-        }
-
-        .service-card .service-price {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--neon-white);
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px var(--shadow-white);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(10px);
-        }
-
-        .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: fadeInModal 0.3s ease;
-        }
-
-        @keyframes fadeInModal {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
-            border: 4px solid var(--neon-yellow);
-            border-radius: 20px;
-            padding: 3.5rem;
-            max-width: 550px;
-            width: 90%;
-            box-shadow: 
-                0 0 50px var(--shadow-yellow),
-                0 0 100px var(--shadow-yellow);
-            animation: scaleIn 0.3s ease;
-            position: relative;
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            font-size: 3rem;
-            color: var(--neon-yellow);
-            cursor: pointer;
-            background: none;
-            border: none;
-            transition: all 0.3s ease;
-            line-height: 1;
-            text-shadow: 0 0 10px var(--neon-yellow);
-        }
-
-        .modal-close:hover {
-            color: var(--neon-white);
-            transform: rotate(90deg);
-            text-shadow: 0 0 20px var(--shadow-white);
-        }
-
-        .modal-content h3 {
-            text-align: center;
-            font-size: 2.2rem;
-            color: var(--neon-yellow);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 15px var(--neon-yellow);
-        }
-
-        .modal-content .item-name {
-            text-align: center;
-            font-size: 1.8rem;
-            color: var(--neon-white);
-            margin-bottom: 2.5rem;
-            font-weight: 700;
-            text-shadow: 0 0 10px var(--shadow-white);
-        }
-
-        .payment-options {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .payment-btn {
-            padding: 1.8rem;
-            background: linear-gradient(135deg, var(--neon-yellow), var(--bright-yellow));
-            border: 3px solid var(--neon-yellow);
-            border-radius: 12px;
-            color: var(--dark-bg);
-            font-size: 1.3rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            box-shadow: 0 0 25px var(--shadow-yellow);
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .payment-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 
-                0 0 40px var(--shadow-yellow),
-                0 0 20px var(--shadow-white);
-            background: linear-gradient(135deg, var(--bright-yellow), var(--neon-yellow));
-        }
-
-        .payment-btn.discord::before {
-            content: '💬';
-            font-size: 2rem;
-        }
-
-        .payment-btn.telegram::before {
-            content: '✈️';
-            font-size: 2rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 5rem;
-            color: var(--neon-white);
-            border-top: 3px solid var(--neon-yellow);
-            box-shadow: 0 -5px 30px var(--shadow-yellow);
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            .privilege-card h3 {
-                font-size: 1.8rem;
-            }
-
-            .privilege-card .price {
-                font-size: 2rem;
-            }
-
-            .tab-btn {
-                font-size: 1.1rem;
-                padding: 1rem 2rem;
-            }
-
-            .tabs-container {
-                gap: 1rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoDorking — OSINT Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--c0:#000d0d;--c1:#00ff9d;--c2:#00c4ff;--c4:#ffd700;--c5:#7b2fff}
+html{scroll-behavior:smooth}
+body{background:var(--c0);color:#c8fce8;font-family:'Exo 2',sans-serif;min-height:100vh;overflow-x:hidden}
+canvas#matrix{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.16;pointer-events:none}
+.scanline{position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,157,0.012) 2px,rgba(0,255,157,0.012) 4px);pointer-events:none;z-index:2}
+.vignette{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,0.75) 100%);pointer-events:none;z-index:2}
+section{display:none;min-height:100vh;padding:0 0 80px;position:relative;z-index:3}
+section.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:0%}100%{background-position:300%}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--c1)}50%{opacity:0.35;box-shadow:none}}
+.home-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px}
+.logo-title{font-family:'Orbitron',monospace;font-size:clamp(2.4rem,7vw,5rem);font-weight:900;letter-spacing:0.18em;background:linear-gradient(90deg,#00ff9d,#00c4ff,#7b2fff,#00ff9d,#00c4ff);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
+.logo-sub{font-family:'JetBrains Mono',monospace;font-size:0.82rem;letter-spacing:0.35em;color:rgba(0,255,157,0.38);margin-top:10px}
+.logo-block{text-align:center;margin-bottom:56px}
+.terminal-box{border:1px solid rgba(0,255,157,0.22);border-radius:4px;padding:18px 32px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;margin-top:28px;display:inline-block;background:rgba(0,255,157,0.03);color:rgba(0,255,157,0.55);line-height:1.9}
+.terminal-box .g{color:var(--c1)}.terminal-box .b{color:var(--c2)}
+.nav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:700px;width:100%}
+@media(max-width:500px){.nav-grid{grid-template-columns:1fr;max-width:360px}}
+.nav-card{position:relative;overflow:hidden;background:rgba(0,13,13,0.85);border:1px solid rgba(0,255,157,0.14);border-radius:8px;padding:38px 24px 32px;cursor:pointer;text-align:center;transition:all .35s ease;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:14px}
+.nav-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .45s ease}
+.nav-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;background:linear-gradient(135deg,rgba(0,255,157,0.05),transparent)}
+.nav-card:hover{border-color:rgba(0,255,157,0.4);transform:translateY(-4px);box-shadow:0 8px 40px rgba(0,255,157,0.08),inset 0 0 30px rgba(0,255,157,0.03)}
+.nav-card:hover::after{transform:scaleX(1)}.nav-card:hover::before{opacity:1}
+.nav-card:hover .ciw{transform:rotate(360deg) scale(1.15)}
+@keyframes spin360{from{transform:rotate(0deg) scale(1)}to{transform:rotate(360deg) scale(1.15)}}
+.nav-card.ba{border-color:rgba(0,196,255,0.18);background:linear-gradient(160deg,rgba(0,13,13,0.9),rgba(0,196,255,0.04))}
+.nav-card.ba::after{background:linear-gradient(90deg,transparent,var(--c2),transparent)}
+.nav-card.ba:hover{border-color:rgba(0,196,255,0.5);box-shadow:0 8px 40px rgba(0,196,255,0.1)}
+.nav-card.ga{border-color:rgba(255,215,0,0.16)}
+.nav-card.ga::after{background:linear-gradient(90deg,transparent,var(--c4),transparent)}
+.nav-card.ga:hover{border-color:rgba(255,215,0,0.45);box-shadow:0 8px 40px rgba(255,215,0,0.08)}
+.nav-card.va{border-color:rgba(123,47,255,0.2)}
+.nav-card.va::after{background:linear-gradient(90deg,transparent,var(--c5),transparent)}
+.nav-card.va:hover{border-color:rgba(123,47,255,0.5);box-shadow:0 8px 40px rgba(123,47,255,0.1)}
+.ciw{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform .55s cubic-bezier(0.34,1.56,0.64,1);background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06)}
+.ci-t{color:var(--c1);box-shadow:0 0 20px rgba(0,255,157,0.2)}
+.ci-b{color:var(--c2);box-shadow:0 0 20px rgba(0,196,255,0.2)}
+.ci-g{color:var(--c4);box-shadow:0 0 20px rgba(255,215,0,0.15)}
+.ci-v{color:var(--c5);box-shadow:0 0 20px rgba(123,47,255,0.2)}
+.card-title{font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700;letter-spacing:0.14em;background:linear-gradient(90deg,#e8fff5,#a0f0d0,#e8fff5);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite}
+.ba .card-title{background:linear-gradient(90deg,#e8f8ff,#80d8ff,#e8f8ff)!important;background-size:200%!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
+.ga .card-title{background:linear-gradient(90deg,#fff8dc,#ffd700,#fff8dc)!important;background-size:200%!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
+.va .card-title{background:linear-gradient(90deg,#ede8ff,#b49dff,#ede8ff)!important;background-size:200%!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
+.card-desc{font-size:0.88rem;color:rgba(200,252,232,0.4);font-weight:300;line-height:1.55}
+.status-bar{margin-top:56px;display:flex;gap:32px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(0,255,157,0.32);flex-wrap:wrap;justify-content:center}
+.sdot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--c1);margin-right:7px;animation:pulse 2.2s ease-in-out infinite}
+.info-wrap{max-width:800px;margin:0 auto;padding:50px 24px 60px}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.1em;color:rgba(0,255,157,0.5);border:1px solid rgba(0,255,157,0.18);border-radius:4px;padding:10px 20px;cursor:pointer;background:none;transition:all .25s;margin-bottom:44px}
+.back-btn:hover{color:var(--c1);border-color:var(--c1);background:rgba(0,255,157,0.05)}
+.info-header{text-align:center;margin-bottom:52px}
+.info-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,5vw,3rem);font-weight:900;letter-spacing:0.1em;background:linear-gradient(90deg,#00ff9d,#00c4ff,#7b2fff,#00ff9d);background-size:250%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
+.info-sub{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:rgba(0,255,157,0.32);letter-spacing:0.22em;margin-top:8px}
+.info-lead{margin-top:24px;border-left:2px solid var(--c1);padding:16px 22px;background:rgba(0,255,157,0.03);border-radius:0 6px 6px 0;font-size:0.95rem;color:rgba(200,252,232,0.65);line-height:1.75}
+.sec-title{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;letter-spacing:0.14em;background:linear-gradient(90deg,#ffd700,#ffaa00,#ffd700);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite;text-align:center;margin:52px 0 22px;display:flex;align-items:center;gap:14px;justify-content:center}
+.sec-title::before,.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.2));max-width:120px}
+.sec-title::after{background:linear-gradient(270deg,transparent,rgba(255,215,0,0.2))}
+.func-title{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;letter-spacing:0.14em;background:linear-gradient(90deg,#00ff9d,#00c4ff,#00ff9d);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite;text-align:center;margin:52px 0 22px;display:flex;align-items:center;gap:14px;justify-content:center}
+.func-title::before,.func-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,157,0.18));max-width:120px}
+.func-title::after{background:linear-gradient(270deg,transparent,rgba(0,255,157,0.18))}
+.plan-card{border:1px solid rgba(0,255,157,0.14);border-radius:8px;padding:28px 28px 24px;margin-bottom:16px;background:rgba(0,255,157,0.02);transition:border-color .3s}
+.plan-card:hover{border-color:rgba(0,255,157,0.3)}
+.plan-card.full{border-color:rgba(0,196,255,0.15);background:rgba(0,196,255,0.015)}
+.plan-card.full:hover{border-color:rgba(0,196,255,0.35)}
+.plan-name{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;letter-spacing:0.1em;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(0,255,157,0.1)}
+.plan-name.teal{background:linear-gradient(90deg,#00ff9d,#00e07a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.plan-name.blue{background:linear-gradient(90deg,#00c4ff,#0090ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.plan-card.full .plan-name{border-bottom-color:rgba(0,196,255,0.15)}
+.flist{list-style:none;display:flex;flex-direction:column;gap:9px}
+.flist li{font-size:0.9rem;color:rgba(200,252,232,0.6);display:flex;align-items:flex-start;gap:11px;line-height:1.45}
+.flist li::before{content:'›';color:var(--c1);font-size:1.1rem;line-height:1.3;flex-shrink:0}
+.plan-card.full .flist li::before{color:var(--c2)}
+.pricing-row{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.ptag{font-family:'JetBrains Mono',monospace;font-size:0.8rem;border:1px solid rgba(0,255,157,0.22);border-radius:3px;padding:7px 16px;color:var(--c1)}
+.plan-card.full .ptag{border-color:rgba(0,196,255,0.22);color:var(--c2)}
+.func-card{border:1px solid rgba(0,255,157,0.1);border-radius:8px;padding:24px 24px 22px;margin-bottom:14px;background:rgba(0,255,157,0.015);transition:border-color .3s,transform .3s,box-shadow .3s}
+.func-card:hover{border-color:rgba(0,255,157,0.35);transform:translateY(-4px);box-shadow:0 10px 35px rgba(0,255,157,0.08)}
+.fct{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;letter-spacing:0.08em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.fct-text{background:linear-gradient(90deg,#00c4ff,#00ff9d,#00c4ff);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite}
+.fd{font-size:0.9rem;color:rgba(200,252,232,0.5);margin-bottom:12px;line-height:1.6}
+.clabel{font-size:0.85rem;color:rgba(200,252,232,0.45);margin-bottom:8px}
+.code-ex{font-family:'JetBrains Mono',monospace;font-size:0.8rem;background:rgba(0,0,0,0.45);border:1px solid rgba(0,255,157,0.1);border-radius:4px;padding:14px 18px;color:var(--c1);line-height:1.9}
+.code-cmd{font-family:'JetBrains Mono',monospace;font-size:0.8rem;display:inline-block;background:rgba(0,255,157,0.08);border:1px solid rgba(0,255,157,0.2);border-radius:3px;padding:4px 12px;color:var(--c1);margin-bottom:10px}
+.db-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.db-tag{font-family:'JetBrains Mono',monospace;font-size:0.78rem;border:1px solid rgba(0,196,255,0.2);border-radius:20px;padding:5px 14px;color:var(--c2);background:rgba(0,196,255,0.06);transition:all .25s;cursor:default}
+.db-tag:hover{border-color:rgba(0,196,255,0.5);background:rgba(0,196,255,0.12)}
+.bottom-btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+@media(max-width:480px){.bottom-btns{grid-template-columns:1fr}}
+.bbot{display:flex;flex-direction:column;align-items:center;gap:12px;border:1px solid rgba(0,255,157,0.2);border-radius:8px;padding:30px 20px;background:rgba(0,255,157,0.03);cursor:pointer;text-decoration:none;transition:all .3s}
+.bbot.bb{border-color:rgba(0,196,255,0.2);background:rgba(0,196,255,0.03)}
+.bbot:hover{border-color:rgba(0,255,157,0.5);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,255,157,0.08)}
+.bbot.bb:hover{border-color:rgba(0,196,255,0.5);box-shadow:0 8px 30px rgba(0,196,255,0.08)}
+.bbot-icon{font-size:1.8rem}
+.bbot-label{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;letter-spacing:0.12em;background:linear-gradient(90deg,#00ff9d,#00c4ff,#00ff9d);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
+.bbot.bb .bbot-label{background:linear-gradient(90deg,#00c4ff,#00ff9d,#00c4ff);background-size:200%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.tline{opacity:0;transform:translateX(-8px);transition:opacity .6s ease,transform .6s ease,color .4s ease;color:rgba(0,255,157,0.2)}
+.tline.disabled{color:rgba(0,255,157,0.22);opacity:1;transform:translateX(0)}
+.tline.active{color:rgba(0,255,157,0.55);opacity:1;transform:translateX(0)}
+.tline .g{color:var(--c1);text-shadow:0 0 8px rgba(0,255,157,0.6)}
+.tline .b{color:var(--c2);text-shadow:0 0 8px rgba(0,196,255,0.5)}
+.tline.disabled .g{color:rgba(0,255,157,0.3);text-shadow:none}
+.tline.disabled .b{color:rgba(0,196,255,0.3);text-shadow:none}
+@keyframes spinOnce{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.spin-emoji{display:inline-block;transition:transform .55s cubic-bezier(0.34,1.56,0.64,1)}
+.bbot:hover .spin-emoji{animation:spinOnce .55s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.fct-icon{display:inline-block}
+.func-card:hover .fct-icon{animation:spinOnce .55s cubic-bezier(0.34,1.56,0.64,1) forwards}
+</style>
 </head>
 <body>
-    <audio id="bgMusic" loop autoplay>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
+<canvas id="matrix"></canvas>
+<div class="scanline"></div>
+<div class="vignette"></div>
 
-    <script>
-        function createSnowflakes() {
-            const snowflakeCount = 60;
-            const body = document.body;
-            
-            for (let i = 0; i < snowflakeCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-                snowflake.innerHTML = '❄';
-                snowflake.style.left = Math.random() * 100 + '%';
-                snowflake.style.animationDuration = Math.random() * 3 + 7 + 's';
-                snowflake.style.fontSize = Math.random() * 1.5 + 0.8 + 'em';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
-                body.appendChild(snowflake);
-            }
-        }
-        createSnowflakes();
-    </script>
+<section id="home" class="active">
+<div class="home-wrap">
+<div class="logo-block">
+<div class="logo-title">AUTODORKING</div>
+<div class="logo-sub">OSINT INTELLIGENCE PLATFORM</div>
+<div class="terminal-box">
+<div class="tline" id="tl0">root@autodorking:~$ system_status --check</div>
+<div class="tline" id="tl1">&nbsp;&nbsp;&gt; OSINT modules: <span class="g">ACTIVE</span></div>
+<div class="tline" id="tl2">&nbsp;&nbsp;&gt; Data streams: <span class="b">ENCRYPTED</span></div>
+<div class="tline" id="tl3">&nbsp;&nbsp;&gt; Connection: <span class="g">SECURE</span></div>
+</div>
+</div>
+<div class="nav-grid">
+<a href="https://t.me/autodorkingIK_robot" target="_blank" class="nav-card ba">
+<div class="ciw ci-b">🤖</div>
+<div class="card-title">АКТУАЛЬНЫЙ БОТ</div>
+<div class="card-desc">Основной инструмент для анализа данных и поиска информации</div>
+</a>
+<a href="https://t.me/autodorking" target="_blank" class="nav-card">
+<div class="ciw ci-t">📡</div>
+<div class="card-title">КАНАЛ</div>
+<div class="card-desc">Актуальные обновления и информация</div>
+</a>
+<a href="https://t.me/autodorking_bbot" target="_blank" class="nav-card ga">
+<div class="ciw ci-g">⚡</div>
+<div class="card-title">ТЕХПОДДЕРЖКА</div>
+<div class="card-desc">Решение технических вопросов</div>
+</a>
+<div class="nav-card va" onclick="showInfo()">
+<div class="ciw ci-v">🔍</div>
+<div class="card-title">ИНФОРМАЦИЯ</div>
+<div class="card-desc">Подробное описание функций и возможностей</div>
+</div>
+</div>
+<div class="status-bar">
+<span><span class="sdot"></span>SYSTEM: ONLINE</span>
+<span><span class="sdot"></span>ENCRYPTION: ACTIVE</span>
+<span><span class="sdot"></span>DATA STREAMS: SECURE</span>
+</div>
+</div>
+</section>
 
-    <header>
-        <div class="header-content">
-            <div class="logo">LocalWorld</div>
-            <button class="music-control" onclick="toggleMusic()">
-                <span id="musicIcon">🔊 Музыка</span>
-            </button>
-        </div>
-    </header>
+<section id="info">
+<div class="info-wrap">
+<button class="back-btn" onclick="showHome()">&#8592; НАЗАД</button>
+<div class="info-header">
+<div class="info-title">ИНФОРМАЦИЯ</div>
+<div class="info-sub">@autodorkingIK_robot</div>
+<div class="info-lead">AutoDorking — это мощный инструмент для автоматизации OSINT-исследований, который поможет вам в сборе и анализе информации из различных источников.</div>
+</div>
 
-    <div class="container">
-        <div class="hero">
-            <h1>LocalWorld</h1>
-            <p>Копия Really World — Твой новый мир приключений!</p>
-        </div>
+<div class="sec-title">ПОДПИСКИ И СТОИМОСТЬ</div>
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="switchTab('privileges')">
-                ⚡ Привилегии
-            </button>
-            <button class="tab-btn" onclick="switchTab('services')">
-                💎 Услуги
-            </button>
-        </div>
+<div class="plan-card">
+<div class="plan-name teal">OSINT ПОДПИСКА — 1$</div>
+<p style="font-size:.85rem;color:rgba(200,252,232,.4);margin-bottom:14px;">При покупке вы получаете доступ к основным функциям:</p>
+<ul class="flist">
+<li>Автоматический доркинг по юзернеймам и ФИО</li>
+<li>Анализ ВК профилей по ID + история профиля</li>
+<li>Извлечение метаданных из изображений</li>
+<li>WHOIS-запросы для доменов</li>
+<li>Создание графов связей между данными</li>
+<li>Анализ TON кошельков</li>
+<li>Анализ IP-адресов / Доменов</li>
+<li>Создание досье в PDF</li>
+<li>Проверка почт</li>
+<li>Проверка номера телефона</li>
+<li>Проверка ИНН/ОГРН</li>
+<li>История телеграм ников и юзернеймов</li>
+</ul>
+</div>
 
-        <div id="privileges" class="tab-content active">
-            <div class="privileges-grid">
-                <div class="privilege-card">
-                    <h3>Helper</h3>
-                    <div class="price">149₽</div>
-                    <ul>
-                        <li>Мут игроков</li>
-                        <li>Все киты кроме Пегаса</li>
-                        <li>Особый префикс</li>
-                        <li>Приоритет в очереди</li>
-                    </ul>
-                    <button class="buy-btn" onclick="openPaymentModal('Helper', '149₽')">Купить</button>
-                </div>
+<div class="plan-card full">
+<div class="plan-name blue">FULL ПОДПИСКА — ОТ 3$</div>
+<p style="font-size:.85rem;color:rgba(200,252,232,.4);margin-bottom:14px;">Все функции OSINT + расширенный поиск по базам данных:</p>
+<div class="pricing-row">
+<div class="ptag">FULL на месяц — 3$</div>
+<div class="ptag">FULL навсегда — 5$</div>
+</div>
+<p style="font-size:.85rem;color:rgba(200,252,232,.4);margin:14px 0 10px;">Дополнительные возможности:</p>
+<ul class="flist">
+<li>Поиск по Telegram, VK, телефонам</li>
+<li>Поиск по email, IP, авто, ИНН</li>
+<li>AI-SEARCH</li>
+</ul>
+</div>
 
-                <div class="privilege-card">
-                    <h3>Moder</h3>
-                    <div class="price">349₽</div>
-                    <ul>
-                        <li>Все права Helper</li>
-                        <li>Темп бан игроков</li>
-                        <li>Спек режим</li>
-                        <li>ГМ 3 (режим наблюдения)</li>
-                        <li>Мут игроков</li>
-                    </ul>
-                    <button class="buy-btn" onclick="openPaymentModal('Moder', '349₽')">Купить</button>
-                </div>
+<div class="func-title">ОСНОВНЫЕ ФУНКЦИИ</div>
 
-                <div class="privilege-card">
-                    <h3>DAdmin</h3>
-                    <div class="price">599₽</div>
-                    <ul>
-                        <li>Все права Moder</li>
-                        <li>Спек режим</li>
-                        <li>Все киты</li>
-                        <li>Бан игроков</li>
-                        <li>Бан по IP</li>
-                        <li>Мут игроков</li>
-                    </ul>
-                    <button class="buy-btn" onclick="openPaymentModal('DAdmin', '599₽')">Купить</button>
-                </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">🔎</span><span class="fct-text">ДОРКИНГ ПО ЮЗЕРНЕЙМАМ / ФИО</span></div>
+<div class="fd">Просто отправьте в чат данные в любом формате:</div>
+<div class="code-ex">Иванов Иван Иванович 20.20.2000 Москва<br>Иванов Иван Иванович 20.20.2000<br>Иванов Иван 20.20 Москва<br>username</div>
+</div>
 
-                <div class="privilege-card">
-                    <h3>Admin</h3>
-                    <div class="price">699₽</div>
-                    <ul>
-                        <li>Все права DAdmin</li>
-                        <li>Бан игроков</li>
-                        <li>ГМ 3 (режим наблюдения)</li>
-                        <li>Спек режим</li>
-                        <li>Мут игроков</li>
-                        <li>Расширенные команды</li>
-                    </ul>
-                    <button class="buy-btn" onclick="openPaymentModal('Admin', '699₽')">Купить</button>
-                </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">🧩</span><span class="fct-text">АНАЛИЗ ВК ПРОФИЛЕЙ</span></div>
+<div class="clabel">Команда:</div>
+<div class="code-cmd">vk:12345678</div>
+<p class="fd">Полный анализ включает:</p>
+<ul class="flist"><li>Основную информацию о пользователе</li><li>Список групп и интересов</li><li>Социальные связи и графы</li><li>Анализ друзей с одинаковыми фамилиями</li></ul>
+</div>
 
-                <div class="privilege-card">
-                    <h3>Owner</h3>
-                    <div class="price">3999₽</div>
-                    <ul>
-                        <li>ВСЕ права на сервере</li>
-                        <li>Абсолютная власть</li>
-                        <li>Донат выдаётся правами</li>
-                        <li>Особый статус владельца</li>
-                        <li>Управление сервером</li>
-                    </ul>
-                    <button class="buy-btn" onclick="openPaymentModal('Owner', '3999₽')">Купить</button>
-                </div>
-            </div>
-        </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">🖼️</span><span class="fct-text">ИЗВЛЕЧЕНИЕ МЕТАДАННЫХ ИЗ ИЗОБРАЖЕНИЙ</span></div>
+<div class="fd">Отправьте фото в виде файла (через скрепку) для извлечения:</div>
+<ul class="flist"><li>Информация о камере</li><li>Дата и время съёмки</li><li>Другие EXIF данные</li></ul>
+</div>
 
-        <div id="services" class="tab-content">
-            <div class="services-grid">
-                <div class="service-card">
-                    <h4>Разбан</h4>
-                    <div class="service-price">149₽</div>
-                    <button class="buy-btn" onclick="openPaymentModal('Разбан', '149₽')">Купить</button>
-                </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">🌐</span><span class="fct-text">WHOIS-ЗАПРОСЫ</span></div>
+<div class="clabel">Команда:</div>
+<div class="code-cmd">/whois example.com</div>
+<p class="fd">Полная информация о домене:</p>
+<ul class="flist"><li>Даты регистрации и окончания</li><li>Контактная информация</li><li>SSL сертификаты</li></ul>
+</div>
 
-                <div class="service-card">
-                    <h4>Размут</h4>
-                    <div class="service-price">49₽</div>
-                    <button class="buy-btn" onclick="openPaymentModal('Размут', '49₽')">Купить</button>
-                </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">💎</span><span class="fct-text">АНАЛИЗ TON КОШЕЛЬКОВ</span></div>
+<div class="clabel">Команда:</div>
+<div class="code-cmd">/ton адрес_кошелька</div>
+<ul class="flist" style="margin-top:4px"><li>Баланс и статистика транзакций</li><li>NFT коллекции</li><li>История операций</li><li>Детальная аналитика</li></ul>
+</div>
 
-                <div class="service-card">
-                    <h4>1 Рилик</h4>
-                    <div class="service-price">1₽</div>
-                    <button class="buy-btn" onclick="openPaymentModal('1 Рилик', '1₽')">Купить</button>
-                </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">📋</span><span class="fct-text">ИСТОРИЯ ТЕЛЕГРАМ АККАУНТОВ</span></div>
+<div class="clabel">Команда:</div>
+<div class="code-cmd">/history tgid</div>
+<ul class="flist" style="margin-top:4px"><li>История смены имён</li><li>Временные метки изменений</li></ul>
+</div>
 
-                <div class="service-card">
-                    <h4>10 Риликов</h4>
-                    <div class="service-price">10₽</div>
-                    <button class="buy-btn" onclick="openPaymentModal('10 Риликов', '10₽')">Купить</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">🕸️</span><span class="fct-text">ПОСТРОЕНИЕ ГРАФОВ СВЯЗЕЙ</span></div>
+<div class="fd">Форматы запросов:</div>
+<div class="code-ex">graph: @username&gt;79001234567&gt;ИвановИван<br>graph: username&gt;(vk.com/id123)(telegram&gt;number)<br>graph: user&gt;phone&gt;email&gt;username&gt;soc1&gt;soc2</div>
+<p style="font-size:.85rem;color:rgba(200,252,232,.42);margin-top:12px;line-height:1.6;">Интерактивные графы с возможностью перемещения узлов. Рекомендуется Chrome.</p>
+</div>
 
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closePaymentModal()">×</button>
-            <h3>Выберите способ связи</h3>
-            <div class="item-name" id="modalItemName"></div>
-            <div class="payment-options">
-                <a href="https://discord.com/users/mrfle1zi" target="_blank" class="payment-btn discord">
-                    Написать в Discord
-                </a>
-                <a href="https://t.me/Fle1ziksorig" target="_blank" class="payment-btn telegram">
-                    Написать в Telegram
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="func-card">
+<div class="fct"><span class="fct-icon">🗄️</span><span class="fct-text">ПОИСК ПО БАЗАМ ДАННЫХ</span></div>
+<div class="fd">Доступные типы поиска:</div>
+<div class="db-tags">
+<span class="db-tag">Telegram</span>
+<span class="db-tag">ВКонтакте</span>
+<span class="db-tag">Телефон</span>
+<span class="db-tag">ФИО</span>
+<span class="db-tag">Email</span>
+<span class="db-tag">IP-адрес</span>
+<span class="db-tag">Авто</span>
+<span class="db-tag">ИНН</span>
+<span class="db-tag">Никнейм</span>
+</div>
+</div>
 
-    <footer>
-        <p>&copy; 2026 LocalWorld - Копия Really World. Все права защищены.</p>
-    </footer>
+<div class="bottom-btns">
+<a href="https://t.me/autodorkingIK_robot" target="_blank" class="bbot">
+<div class="bbot-icon spin-emoji">🤖</div>
+<div class="bbot-label">ПЕРЕЙТИ К БОТУ</div>
+</a>
+<div class="bbot bb" onclick="showHome()">
+<div class="bbot-icon spin-emoji">🏠</div>
+<div class="bbot-label">НА ГЛАВНУЮ</div>
+</div>
+</div>
 
-    <script>
-        let musicPlaying = true;
-        const music = document.getElementById('bgMusic');
+</div>
+</section>
 
-        window.addEventListener('load', function() {
-            music.play().catch(function() {
-                musicPlaying = false;
-                document.getElementById('musicIcon').textContent = '🔇 Музыка';
-            });
-        });
-
-        function toggleMusic() {
-            const icon = document.getElementById('musicIcon');
-            if (musicPlaying) {
-                music.pause();
-                icon.textContent = '🔇 Музыка';
-                musicPlaying = false;
-            } else {
-                music.play();
-                icon.textContent = '🔊 Музыка';
-                musicPlaying = true;
-            }
-        }
-
-        function switchTab(tabName) {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            document.getElementById(tabName).classList.add('active');
-
-            if (tabName === 'privileges') {
-                buttons[0].classList.add('active');
-            } else {
-                buttons[1].classList.add('active');
-            }
-
-            window.scrollTo({
-                top: document.querySelector('.tabs-container').offsetTop - 100,
-                behavior: 'smooth'
-            });
-        }
-
-        function openPaymentModal(itemName, price) {
-            const modal = document.getElementById('paymentModal');
-            const modalItemName = document.getElementById('modalItemName');
-            modalItemName.textContent = `${itemName} — ${price}`;
-            modal.classList.add('active');
-        }
-
-        function closePaymentModal() {
-            const modal = document.getElementById('paymentModal');
-            modal.classList.remove('active');
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('paymentModal');
-            if (event.target === modal) {
-                closePaymentModal();
-            }
-        }
-    </script>
+<script>
+(function(){
+var cv=document.getElementById('matrix');
+var cx=cv.getContext('2d');
+var cols,drops;
+function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;cols=Math.floor(cv.width/16);drops=[];for(var i=0;i<cols;i++)drops[i]=1}
+resize();
+window.addEventListener('resize',resize);
+function draw(){
+cx.fillStyle='rgba(0,13,13,0.05)';cx.fillRect(0,0,cv.width,cv.height);
+cx.font='13px monospace';
+for(var i=0;i<drops.length;i++){
+var bright=Math.random()>0.97;
+cx.fillStyle=bright?'#00ffcc':'#00ff9d';
+cx.globalAlpha=bright?0.9:0.25+Math.random()*0.3;
+cx.fillText(Math.random()>0.5?'1':'0',i*16,drops[i]*16);
+cx.globalAlpha=1;
+if(drops[i]*16>cv.height&&Math.random()>0.975)drops[i]=0;
+drops[i]++;
+}
+}
+setInterval(draw,55);
+})();
+function runTerminal(){
+var lines=['tl0','tl1','tl2','tl3'];
+lines.forEach(function(id){
+var el=document.getElementById(id);
+if(el){el.className='tline disabled'}
+});
+lines.forEach(function(id,i){
+setTimeout(function(){
+var el=document.getElementById(id);
+if(el){
+el.className='tline disabled';
+setTimeout(function(){el.className='tline active'},80);
+}
+},i*520);
+});
+}
+window.addEventListener('load',function(){setTimeout(runTerminal,400)});
+function showInfo(){document.getElementById('home').classList.remove('active');document.getElementById('info').classList.add('active');window.scrollTo(0,0)}
+function showHome(){document.getElementById('info').classList.remove('active');document.getElementById('home').classList.add('active');window.scrollTo(0,0);setTimeout(runTerminal,200)}
+</script>
 </body>
 </html>
